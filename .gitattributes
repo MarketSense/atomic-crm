@@ -1,0 +1,2 @@
+# Husky hooks run under sh, which breaks on CRLF: keep LF on every OS.
+.husky/** text eol=lf

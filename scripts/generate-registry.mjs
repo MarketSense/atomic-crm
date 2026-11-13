@@ -6,10 +6,24 @@ import path from "node:path";
 
 const registryPath = "registry.json";
 const basePath = "src";
-const atomicCrmComponentsPath = path.join(basePath, "components", "atomic-crm");
-const supabaseComponentsPath = path.join(basePath, "components", "supabase");
-const hooksPath = path.join(basePath, "hooks");
-const libPath = path.join(basePath, "lib");
+// Glob patterns and registry paths always use forward slashes: path.join would
+// produce backslashes on Windows, which glob reads as escapes (matching nothing).
+const atomicCrmComponentsPath = path.posix.join(
+  basePath,
+  "components",
+  "atomic-crm",
+);
+const supabaseComponentsPath = path.posix.join(
+  basePath,
+  "components",
+  "supabase",
+);
+const hooksPath = path.posix.join(basePath, "hooks");
+const libPath = path.posix.join(basePath, "lib");
+const globOptions = { posix: true };
+// glob returns files in filesystem order, which differs between OSes: sort so
+// the generated registry is identical whoever runs the pre-commit hook.
+const byPath = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 
 const excludedHooks = [
   "filter-context.tsx",
@@ -30,19 +44,23 @@ const testFilePattern = "**/*.{test,spec}.*";
 const storyFilePattern = "**/*.stories.*";
 
 const atomicCrmComponents = globSync(
-  path.join(atomicCrmComponentsPath, "**", "*.ts*"),
-  { ignore: [testFilePattern, storyFilePattern] },
-);
+  path.posix.join(atomicCrmComponentsPath, "**", "*.ts*"),
+  { ...globOptions, ignore: [testFilePattern, storyFilePattern] },
+).sort(byPath);
 const supabaseComponents = globSync(
-  path.join(supabaseComponentsPath, "**", "*.ts*"),
-  { ignore: [testFilePattern, storyFilePattern] },
-);
-const hooks = globSync(path.join(hooksPath, "**", "*.ts*")).filter((hook) => {
-  return !excludedHooks.includes(path.basename(hook));
-});
-const libFiles = globSync(path.join(libPath, "**", "*.ts*")).filter((file) => {
-  return !excludedLibFiles.includes(path.basename(file));
-});
+  path.posix.join(supabaseComponentsPath, "**", "*.ts*"),
+  { ...globOptions, ignore: [testFilePattern, storyFilePattern] },
+).sort(byPath);
+const hooks = globSync(path.posix.join(hooksPath, "**", "*.ts*"), globOptions)
+  .filter((hook) => {
+    return !excludedHooks.includes(path.posix.basename(hook));
+  })
+  .sort(byPath);
+const libFiles = globSync(path.posix.join(libPath, "**", "*.ts*"), globOptions)
+  .filter((file) => {
+    return !excludedLibFiles.includes(path.posix.basename(file));
+  })
+  .sort(byPath);
 const changelogPath = "CHANGELOG.md";
 
 const registryContent = JSON.parse(fs.readFileSync(registryPath, "utf-8"));
