@@ -940,6 +940,34 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/triggers/RehearsalNote.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/triggers/TodayPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/triggers/TriggerBoard.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/triggers/TriggerPanel.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/triggers/WindowChip.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/triggers/todayGroups.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/triggers/triggerModel.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/types.ts",
           "type": "registry:component"
         },
