@@ -177,7 +177,7 @@ const MobileBoard = () => {
   return (
     <>
       <MobileHeader>
-        <MobileBackButton />
+        <MobileBackButton to="/" />
         <h1 className="flex-1 text-xl font-semibold py-3 truncate">
           Board by stage
         </h1>
