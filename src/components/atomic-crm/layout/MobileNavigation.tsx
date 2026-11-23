@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import {
+  Columns3,
   Home,
   ListTodo,
   Plus,
@@ -33,6 +34,8 @@ export const MobileNavigation = () => {
     currentPath = "/contacts";
   } else if (matchPath("/companies/*", location.pathname)) {
     currentPath = "/companies";
+  } else if (matchPath("/board", location.pathname)) {
+    currentPath = "/board";
   } else if (matchPath("/tasks/*", location.pathname)) {
     currentPath = "/tasks";
   } else if (matchPath("/deals/*", location.pathname)) {
@@ -65,7 +68,7 @@ export const MobileNavigation = () => {
           <NavigationButton
             href="/"
             Icon={Home}
-            label={translate("ra.page.dashboard")}
+            label="Today"
             isActive={currentPath === "/"}
           />
           <NavigationButton
@@ -77,11 +80,12 @@ export const MobileNavigation = () => {
             isActive={currentPath === "/contacts"}
           />
           <CreateButton />
+          {/* Trigger Desk: Board replaces Tasks in the bar; /tasks still works */}
           <NavigationButton
-            href="/tasks"
-            Icon={ListTodo}
-            label={translate("resources.tasks.name", { smart_count: 2 })}
-            isActive={currentPath === "/tasks"}
+            href="/board"
+            Icon={Columns3}
+            label="Board"
+            isActive={currentPath === "/board"}
           />
           <SettingsButton />
         </>

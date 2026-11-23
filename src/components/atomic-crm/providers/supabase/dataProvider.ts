@@ -87,6 +87,11 @@ const getDataProviderWithCustomMethods = () => {
       if (resource === "contacts") {
         return baseDataProvider.getOne("contacts_summary", params);
       }
+      if (resource === "contact_lead_fields") {
+        // Trigger Desk: the raw contacts row, which carries the lead columns
+        // (engine_fit, email_status, location) that contacts_summary leaves out
+        return baseDataProvider.getOne("contacts", params);
+      }
 
       return baseDataProvider.getOne(resource, params);
     },

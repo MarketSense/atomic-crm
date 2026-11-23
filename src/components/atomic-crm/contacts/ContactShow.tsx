@@ -33,6 +33,7 @@ import { Avatar } from "./Avatar";
 import { ContactAside } from "./ContactAside";
 import { useTrackRecentContact } from "./useRecentContacts";
 import { MobileBackButton } from "../misc/MobileBackButton";
+import { TriggerPanel } from "../triggers/TriggerPanel";
 
 export const ContactShow = (props: ShowBaseProps = {}) => {
   const isMobile = useIsMobile();
@@ -71,7 +72,7 @@ const ContactShowErrorMobile = () => {
   );
 };
 
-const MOBILE_TABS = ["notes", "tasks", "details"];
+const MOBILE_TABS = ["trigger", "notes", "tasks", "details"];
 
 const ContactShowContentMobile = () => {
   const translate = useTranslate();
@@ -79,7 +80,9 @@ const ContactShowContentMobile = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const requestedTab = searchParams.get("tab");
   const activeTab =
-    requestedTab && MOBILE_TABS.includes(requestedTab) ? requestedTab : "notes";
+    requestedTab && MOBILE_TABS.includes(requestedTab)
+      ? requestedTab
+      : "trigger";
   const { defaultTitle, record, isPending, error } = useShowContext<Contact>();
   const [noteCreateOpen, setNoteCreateOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -166,7 +169,8 @@ const ContactShowContentMobile = () => {
           onValueChange={(tab) => setSearchParams({ tab }, { replace: true })}
           className="w-full"
         >
-          <TabsList className="grid w-full grid-cols-3 h-10">
+          <TabsList className="grid w-full grid-cols-4 h-10">
+            <TabsTrigger value="trigger">Trigger</TabsTrigger>
             <TabsTrigger value="notes">
               {translate("resources.notes.name", { smart_count: 2 })}
             </TabsTrigger>
@@ -179,6 +183,10 @@ const ContactShowContentMobile = () => {
               {translate("crm.common.details")}
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="trigger" className="mt-4">
+            <TriggerPanel />
+          </TabsContent>
 
           <TabsContent value="notes" className="mt-2">
             <InfiniteListBase
@@ -313,6 +321,10 @@ const ContactShowContent = () => {
                 </ReferenceField>
               </div>
             </div>
+            <div className="mt-4 mb-2">
+              <TriggerPanel />
+            </div>
+            <Separator className="my-4" />
             <InfiniteListBase
               resource="contact_notes"
               filter={{ contact_id: record.id }}

@@ -59,6 +59,20 @@ import { ContactListMobile } from "../contacts/ContactList.tsx";
 import { ContactShow } from "../contacts/ContactShow.tsx";
 import { CompanyShow } from "../companies/CompanyShow.tsx";
 import { NoteShowPage } from "../notes/NoteShowPage.tsx";
+import { TodayPage } from "../triggers/TodayPage.tsx";
+import { TriggerBoard } from "../triggers/TriggerBoard.tsx";
+
+// Trigger Desk: the Today list is the home screen; Atomic's original
+// dashboard stays reachable at /activity.
+const ACTIVITY_PATH = "/activity";
+const TRIGGER_RESOURCES = [
+  "trigger_events",
+  "trigger_events_live",
+  "trigger_today",
+  "outreach_touches",
+  "rep_cards",
+  "contact_lead_fields",
+];
 
 const defaultStore = localStorageStore(undefined, "CRM");
 
@@ -239,7 +253,7 @@ const DesktopAdmin = (
   return (
     <Admin
       layout={props.layout ?? Layout}
-      dashboard={props.dashboard ?? Dashboard}
+      dashboard={props.dashboard ?? TodayPage}
       {...props}
     >
       <CustomRoutes noLayout>
@@ -261,6 +275,8 @@ const DesktopAdmin = (
         <Route path={SettingsPage.path} element={<SettingsPage />} />
         <Route path={ImportPage.path} element={<ImportPage />} />
         <Route path={ChangelogPage.path} element={<ChangelogPage />} />
+        <Route path={TriggerBoard.path} element={<TriggerBoard />} />
+        <Route path={ACTIVITY_PATH} element={<Dashboard />} />
       </CustomRoutes>
       <Resource name="deals" {...deals} />
       <Resource name="contacts" {...contacts} />
@@ -270,6 +286,9 @@ const DesktopAdmin = (
       <Resource name="tasks" />
       <Resource name="sales" {...sales} />
       <Resource name="tags" />
+      {TRIGGER_RESOURCES.map((name) => (
+        <Resource key={name} name={name} />
+      ))}
     </Admin>
   );
 };
@@ -314,7 +333,7 @@ const MobileAdmin = (
       <Admin
         queryClient={queryClient}
         layout={props.layout ?? MobileLayout}
-        dashboard={props.dashboard ?? MobileDashboard}
+        dashboard={props.dashboard ?? TodayPage}
         {...props}
       >
         <CustomRoutes noLayout>
@@ -336,6 +355,8 @@ const MobileAdmin = (
             element={<SettingsPageMobile />}
           />
           <Route path={ChangelogPage.path} element={<ChangelogPage />} />
+          <Route path={TriggerBoard.path} element={<TriggerBoard />} />
+          <Route path={ACTIVITY_PATH} element={<MobileDashboard />} />
         </CustomRoutes>
         <Resource
           name="contacts"
@@ -347,6 +368,9 @@ const MobileAdmin = (
         </Resource>
         <Resource name="companies" show={CompanyShow} />
         <Resource name="tasks" list={MobileTasksList} />
+        {TRIGGER_RESOURCES.map((name) => (
+          <Resource key={name} name={name} />
+        ))}
       </Admin>
     </PersistQueryClientProvider>
   );

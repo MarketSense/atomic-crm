@@ -19,6 +19,8 @@ const Header = () => {
   let currentPath: string | boolean = "/";
   if (matchPath("/", location.pathname)) {
     currentPath = "/";
+  } else if (matchPath("/board", location.pathname)) {
+    currentPath = "/board";
   } else if (matchPath("/contacts/*", location.pathname)) {
     currentPath = "/contacts";
   } else if (matchPath("/companies/*", location.pathname)) {
@@ -54,9 +56,14 @@ const Header = () => {
               <div>
                 <nav className="flex">
                   <NavigationTab
-                    label={translate("ra.page.dashboard")}
+                    label="Today"
                     to="/"
                     isActive={currentPath === "/"}
+                  />
+                  <NavigationTab
+                    label="Board"
+                    to="/board"
+                    isActive={currentPath === "/board"}
                   />
                   <NavigationTab
                     label={translate("resources.contacts.name", {
