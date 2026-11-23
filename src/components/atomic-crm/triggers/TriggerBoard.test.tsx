@@ -21,6 +21,7 @@ describe.each([true, false])("TriggerBoard (mobile=%s)", (mobile) => {
     const screen = await render(
       <StoryWrapper
         data={{
+          // @ts-expect-error the demo Db type has no trigger views
           trigger_events_live: [
             event(1, "ready_to_send", 1),
             event(2, "hold", null),
